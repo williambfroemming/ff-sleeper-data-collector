@@ -7,12 +7,29 @@ Copy this to config.py and customize with your league information
 # LEAGUE CONFIGURATION
 # ============================================================================
 
-# Your Sleeper League IDs (find in URL: sleeper.com/leagues/YOUR_LEAGUE_ID)
+# Your Sleeper League IDs
+# Sleeper creates a NEW league ID each season for the same league
+# 
+# For a SINGLE season:
+# LEAGUE_IDS = ['your_2024_league_id']
+# START_YEAR = 2024
+#
+# For MULTIPLE seasons (list in chronological order, oldest first):
+# LEAGUE_IDS = [
+#     'your_2022_league_id',
+#     'your_2023_league_id',
+#     'your_2024_league_id'
+# ]
+# START_YEAR = 2022  # Must match the year of your FIRST league ID
+#
+# The script will automatically increment the year for each league ID.
+# League ID 1 → START_YEAR, League ID 2 → START_YEAR+1, etc.
+
 LEAGUE_IDS = [
-    'YOUR_LEAGUE_ID_HERE'  # Replace with your actual league ID
+    'YOUR_LEAGUE_ID_HERE'  # Replace with your league ID(s)
 ]
 
-# The year/season you want to collect data for
+# The year/season of your FIRST league ID in the list above
 START_YEAR = 2024
 
 # Week ranges
