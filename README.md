@@ -10,71 +10,79 @@ A comprehensive Python tool to collect and analyze fantasy football data from Sl
 - **High/Low Points**: Weekly high and low scorers
 - **Player Details**: Individual player statistics and fantasy points (optional)
 
-## Quick Start
-
-### Prerequisites
+## Prerequisites
 
 - Python 3.8 or higher
 - pip (Python package installer)
 
-### Installation
+## Installation
 
-1. **Clone this repository**
-   ```bash
-   git clone https://github.com/yourusername/fantasy-football-sleeper.git
-   cd fantasy-football-sleeper
-   ```
+### 1. Clone this repository
 
-2. **Create a virtual environment** (recommended)
-   ```bash
-   # On macOS/Linux
-   python3 -m venv venv
-   source venv/bin/activate
+```bash
+git clone https://github.com/yourusername/fantasy-football-sleeper.git
+cd fantasy-football-sleeper
+```
 
-   # On Windows
-   python -m venv venv
-   venv\Scripts\activate
-   ```
+### 2. Create a virtual environment (recommended)
 
-3. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
+```bash
+# On macOS/Linux
+python3 -m venv venv
+source venv/bin/activate
 
-### Configuration
+# On Windows
+python -m venv venv
+venv\Scripts\activate
+```
 
-1. **Copy the example config**
-   ```bash
-   cp examples/example_config.py config.py
-   ```
+### 3. Install dependencies
 
-2. **Edit `config.py`** with your league information:
-   ```python
-   LEAGUE_IDS = ['your_league_id_here']
-   START_YEAR = 2024
-   BASE_OUTPUT_DIR = '/path/to/your/output/folder'
-   
-   # Update NAME_MAP with your league members
-   NAME_MAP = {
-       "sleeper_username1": "Real Name 1",
-       "sleeper_username2": "Real Name 2",
-       # ... add all your league members
-   }
-   ```
+```bash
+pip install -r requirements.txt
+```
 
-3. **Find your League ID**:
-   - Go to your league on Sleeper
-   - Look at the URL: `https://sleeper.com/leagues/YOUR_LEAGUE_ID`
-   - Copy the long number (e.g., `1124822672346198016`)
+## Configuration
 
-### Usage
+### 1. Copy the example config
 
-**Run the complete data collection:**
+```bash
+cp examples/example_config.py config.py
+```
+
+### 2. Edit config.py with your league information
+
+```python
+LEAGUE_IDS = ['your_league_id_here']
+START_YEAR = 2024
+BASE_OUTPUT_DIR = '/path/to/your/output/folder'
+
+# Update NAME_MAP with your league members
+NAME_MAP = {
+    "sleeper_username1": "Real Name 1",
+    "sleeper_username2": "Real Name 2",
+    # ... add all your league members
+}
+```
+
+### 3. Find your League ID
+
+- Go to your league on Sleeper
+- Look at the URL: `https://sleeper.com/leagues/YOUR_LEAGUE_ID`
+- Copy the long number (e.g., `1124822672346198016`)
+
+## Usage
+
+### Run the complete data collection
+
 ```bash
 python main.py
 ```
 
-**Customize what to collect** by editing flags in `main.py`:
+### Customize what to collect
+
+Edit flags in `main.py`:
+
 ```python
 COLLECT_LEAGUE_DATA = True
 COLLECT_MATCHUP_DATA = True
@@ -85,43 +93,43 @@ COLLECT_PLAYER_DATA = True  # Set to False to skip (slower)
 
 ## VS Code Setup
 
-### Open in VS Code
+### 1. Open in VS Code
 
-1. **Open VS Code**
-2. **Open the project folder**: `File` → `Open Folder` → Select `fantasy-football-sleeper`
+- Open VS Code
+- File -> Open Folder -> Select `fantasy-football-sleeper`
 
-### Set Up Python Environment in VS Code
+### 2. Install Python extension
 
-1. **Install Python extension** (if not already installed):
-   - Click the Extensions icon (or press `Cmd+Shift+X` on Mac / `Ctrl+Shift+X` on Windows)
-   - Search for "Python" by Microsoft
-   - Click Install
+- Click Extensions icon or press `Cmd+Shift+X` (Mac) / `Ctrl+Shift+X` (Windows)
+- Search for "Python" by Microsoft
+- Click Install
 
-2. **Select Python interpreter**:
-   - Press `Cmd+Shift+P` (Mac) or `Ctrl+Shift+P` (Windows)
-   - Type "Python: Select Interpreter"
-   - Choose the interpreter from your `venv` folder
+### 3. Set up Python environment
 
-3. **Run the script**:
-   - Open `main.py`
-   - Press `F5` or click the "Run" button (▶️)
-   - Or use the integrated terminal: `python main.py`
+- Press `Cmd+Shift+P` (Mac) or `Ctrl+Shift+P` (Windows)
+- Type "Python: Select Interpreter"
+- Choose the interpreter from your `venv` folder
+
+### 4. Run the script
+
+- Open `main.py`
+- Press `F5` or click the Run button
+- Or use the integrated terminal: `python main.py`
 
 ### Using the Integrated Terminal
 
-1. **Open terminal in VS Code**: `` Ctrl+` `` or `View` → `Terminal`
-2. **Activate virtual environment**:
+1. Open terminal: `` Ctrl+` `` or View -> Terminal
+2. Activate virtual environment:
+
    ```bash
    # On macOS/Linux
    source venv/bin/activate
-   
+
    # On Windows
    venv\Scripts\activate
    ```
-3. **Run the script**:
-   ```bash
-   python main.py
-   ```
+
+3. Run: `python main.py`
 
 ## Output Files
 
@@ -195,25 +203,41 @@ OUTPUT_DIRS = {
 ## Troubleshooting
 
 ### "Module not found" error
+
 - Make sure your virtual environment is activated
 - Run `pip install -r requirements.txt` again
 
 ### "Failed to fetch data" error
+
 - Check your internet connection
 - Verify your league ID is correct
 - Sleeper API may be rate-limiting (wait a minute and try again)
 
 ### Player data is slow
-- This is normal! The player module fetches stats for every player every week
+
+- This is normal. The player module fetches stats for every player every week
 - Set `COLLECT_PLAYER_DATA = False` in `main.py` to skip this
 
 ### Empty Excel files
+
 - Make sure the season has started and games have been played
 - Check that your `START_YEAR` matches the current season
+
+### "config.py not found"
+
+- Make sure you copied `examples/example_config.py` to `config.py`
+- Check that it's in the root directory (same level as `main.py`)
+
+### Can't activate virtual environment (Windows PowerShell)
+
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
 
 ## API Rate Limits
 
 The Sleeper API recommends staying under 1000 calls per minute. This script:
+
 - Implements retry logic with delays
 - Reuses data where possible
 - Should not exceed rate limits under normal usage
@@ -224,19 +248,9 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-MIT License - feel free to use and modify as needed.
+MIT License - see LICENSE file for details.
 
 ## Acknowledgments
 
 - Built using the [Sleeper API](https://docs.sleeper.app/)
 - Inspired by the need to track fantasy football league history
-
-## Questions?
-
-- Check the [Sleeper API Documentation](https://docs.sleeper.app/)
-- Open an issue on GitHub
-- Review the example config for guidance
-
----
-
-**Happy Fantasy Football Data Collecting!** 🏈📊
