@@ -11,7 +11,7 @@ from typing import Dict
 try:
     import config
 except ImportError:
-    print("ERROR: config.py not found!")
+    print("❌ ERROR: config.py not found!")
     print("Please copy examples/example_config.py to config.py and customize it.")
     exit(1)
 
@@ -41,8 +41,8 @@ COLLECT_PLAYOFF_DATA = True
 COLLECT_HIGHLOW_DATA = True
 COLLECT_PLAYER_DATA = True  # Set to False to skip (slow!)
 
-SAVE_INDIVIDUAL_FILES = True  # Save separate files (matches existing format)
-SAVE_COMBINED_FILE = True     # Save all data in one file
+SAVE_INDIVIDUAL_FILES = False  # Set to True if you need separate files for each data type
+SAVE_COMBINED_FILE = True      # Recommended: All data in one Excel file with multiple sheets
 
 
 # ============================================================================

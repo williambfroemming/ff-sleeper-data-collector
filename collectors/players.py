@@ -66,6 +66,42 @@ def collect_player_data(league_id: str, year: int, weeks: range,
                 # Calculate fantasy points
                 fantasy_points = calculate_player_points(player_stats, scoring_settings)
                 
+                # Extract key stats (will be NaN if not applicable for position)
+                stats_dict = {
+                    # Passing
+                    'pass_yd': player_stats.get('pass_yd', None),
+                    'pass_td': player_stats.get('pass_td', None),
+                    'pass_int': player_stats.get('pass_int', None),
+                    'pass_att': player_stats.get('pass_att', None),
+                    'pass_cmp': player_stats.get('pass_cmp', None),
+                    
+                    # Rushing
+                    'rush_yd': player_stats.get('rush_yd', None),
+                    'rush_td': player_stats.get('rush_td', None),
+                    'rush_att': player_stats.get('rush_att', None),
+                    
+                    # Receiving  
+                    'rec': player_stats.get('rec', None),
+                    'rec_yd': player_stats.get('rec_yd', None),
+                    'rec_td': player_stats.get('rec_td', None),
+                    'rec_tgt': player_stats.get('rec_tgt', None),
+                    
+                    # Kicking
+                    'fgm': player_stats.get('fgm', None),
+                    'fga': player_stats.get('fga', None),
+                    'xpm': player_stats.get('xpm', None),
+                    'xpa': player_stats.get('xpa', None),
+                    
+                    # Defense
+                    'def_int': player_stats.get('def_int', None),
+                    'def_sack': player_stats.get('def_sack', None),
+                    'def_td': player_stats.get('def_td', None),
+                    'pts_allow': player_stats.get('pts_allow', None),
+                    
+                    # Misc
+                    'fum_lost': player_stats.get('fum_lost', None),
+                }
+                
                 all_player_data.append({
                     'year': year,
                     'week': week,
@@ -77,6 +113,7 @@ def collect_player_data(league_id: str, year: int, weeks: range,
                     'nfl_team': player_info.get('team', 'FA'),
                     'is_starter': is_starter,
                     'fantasy_points': fantasy_points,
+                    **stats_dict  # Add all stats columns
                 })
     
     return pd.DataFrame(all_player_data)
