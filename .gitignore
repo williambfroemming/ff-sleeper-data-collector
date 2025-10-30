@@ -37,3 +37,10 @@ htmlcov/
 dist/
 build/
 *.egg-info/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+infra/terraform/backend.hcl
