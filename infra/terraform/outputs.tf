@@ -21,8 +21,3 @@ output "athena_workgroup" {
 output "lambda_name" {
   value = aws_lambda_function.ingest.function_name
 }
-
-output "quicksight_role_arn" {
-  value       = aws_iam_role.quicksight.arn
-  description = "IAM role ARN for QuickSight to assume"
-}
