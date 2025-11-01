@@ -1,9 +1,13 @@
+# Try to find the QuickSight service role
+data "aws_iam_role" "quicksight" {
+  name = "aws-quicksight-service-role-v0"
+}
+
 resource "aws_kms_key" "lake" {
   description             = "KMS CMK for FF data lake"
   deletion_window_in_days = 7
   enable_key_rotation     = true
   
-  # Key policy that allows QuickSight to use the key
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -17,7 +21,20 @@ resource "aws_kms_key" "lake" {
         Resource = "*"
       },
       {
-        Sid    = "Allow QuickSight to use the key"
+        Sid    = "Allow QuickSight Role to use the key"
+        Effect = "Allow"
+        Principal = {
+          AWS = data.aws_iam_role.quicksight.arn
+        }
+        Action = [
+          "kms:Decrypt",
+          "kms:DescribeKey",
+          "kms:GenerateDataKey"
+        ]
+        Resource = "*"
+      },
+      {
+        Sid    = "Allow QuickSight Service to use the key"
         Effect = "Allow"
         Principal = {
           Service = "quicksight.amazonaws.com"
@@ -25,7 +42,8 @@ resource "aws_kms_key" "lake" {
         Action = [
           "kms:Decrypt",
           "kms:DescribeKey",
-          "kms:GenerateDataKey"
+          "kms:GenerateDataKey",
+          "kms:CreateGrant"
         ]
         Resource = "*"
         Condition = {
@@ -80,9 +98,4 @@ resource "aws_kms_key" "lake" {
       }
     ]
   })
-}
-
-resource "aws_kms_alias" "lake" {
-  name          = "alias/${var.project}-lake"
-  target_key_id = aws_kms_key.lake.key_id
 }
