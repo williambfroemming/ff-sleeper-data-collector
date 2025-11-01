@@ -73,6 +73,7 @@ resource "aws_iam_role_policy_attachment" "glue_crawler_extras_attach" {
   policy_arn = aws_iam_policy.glue_crawler_extras.arn
 }
 
+# Existing crawler for legacy Excel data
 resource "aws_glue_crawler" "staging_legacy_excel" {
   name          = "${var.project}-staging-legacy-excel"
   role          = aws_iam_role.glue_crawler.arn
@@ -98,3 +99,32 @@ resource "aws_glue_crawler" "staging_legacy_excel" {
     recrawl_behavior = "CRAWL_EVERYTHING"
   }
 }
+
+# Partition detection for year-partitioned data
+resource "aws_glue_crawler" "staging_automated" {
+   # Existing configuration
+  name          = "ff-data-project-staging-automated"
+  role          = aws_iam_role.glue_service_role.arn
+  database_name = aws_glue_catalog_database.staging.name
+  description   = "Automated staging crawler for data lake"
+
+  s3_target {
+    path = "s3://${aws_s3_bucket.lake.bucket}/staging/"
+  }
+
+  recrawl_policy {
+    recrawl_behavior = "CRAWL_NEW_FOLDERS"
+  }
+
+  schema_change_policy {
+    delete_behavior = "LOG"
+    update_behavior = "LOG"
+  }
+
+  schedule = "cron(0 2 ? * THU *)" # Runs every Thursday at 2 AM UTC
+
+  configuration = jsonencode({
+    Version = 1.0
+  })
+}
+
