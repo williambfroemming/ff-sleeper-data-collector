@@ -82,4 +82,12 @@ def collect_player_total_points_data(years: List[int], scoring_settings: dict) -
     
     print(f"    Collected totals for {len(df)} player-seasons")
     
+    # Ensure correct data types
+    df['weeks_played'] = df['weeks_played'].astype('int64')
+    df['total_fantasy_points'] = df['total_fantasy_points'].astype('float64')
+    df['avg_points_per_game'] = df['avg_points_per_game'].astype('float64')
+    
+    # **CRITICAL: Drop year column if it's a partition**
+    df = df.drop(columns=['year'], errors='ignore')
+    
     return df

@@ -100,31 +100,44 @@ resource "aws_glue_crawler" "staging_legacy_excel" {
   }
 }
 
-# Partition detection for year-partitioned data
 resource "aws_glue_crawler" "staging_automated" {
-   # Existing configuration
-  name          = "ff-data-project-staging-automated"
-  role          = aws_iam_role.glue_service_role.arn
-  database_name = aws_glue_catalog_database.staging.name
-  description   = "Automated staging crawler for data lake"
+  name          = "${var.project}-staging-automated"
+  role          = aws_iam_role.glue_crawler.arn
+  database_name = aws_glue_catalog_database.raw.name
+  table_prefix  = "auto_"
+
+  # Separate s3_target for each table
+  s3_target {
+    path = "s3://${aws_s3_bucket.lake.bucket}/staging/stg_regular_season/"
+  }
 
   s3_target {
-    path = "s3://${aws_s3_bucket.lake.bucket}/staging/"
+    path = "s3://${aws_s3_bucket.lake.bucket}/staging/stg_matchup_data/"
   }
 
-  recrawl_policy {
-    recrawl_behavior = "CRAWL_NEW_FOLDERS"
+  s3_target {
+    path = "s3://${aws_s3_bucket.lake.bucket}/staging/stg_playoff_matchup_data/"
   }
 
-  schema_change_policy {
-    delete_behavior = "LOG"
-    update_behavior = "LOG"
+  s3_target {
+    path = "s3://${aws_s3_bucket.lake.bucket}/staging/stg_player_details_by_team/"
   }
 
-  schedule = "cron(0 2 ? * THU *)" # Runs every Thursday at 2 AM UTC
+  s3_target {
+    path = "s3://${aws_s3_bucket.lake.bucket}/staging/stg_player_total_points/"
+  }
 
   configuration = jsonencode({
     Version = 1.0
+    CrawlerOutput = {
+      Partitions = { AddOrUpdateBehavior = "InheritFromTable" }
+    }
   })
-}
 
+  schema_change_policy {
+    delete_behavior = "LOG"
+    update_behavior = "UPDATE_IN_DATABASE"
+  }
+
+  schedule = "cron(0 1 ? * THU *)"
+}

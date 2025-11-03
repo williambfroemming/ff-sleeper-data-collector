@@ -164,8 +164,13 @@ def collect_season_data(league_id: str, year: int, week: int = None,
             if playoff_weeks:
                 week_to_round = {15: 1, 16: 2, 17: 3}
                 df_playoffs = collect_playoff_matchup_data(
-                    league_id, year, playoff_weeks, week_to_round,
-                    roster_to_owner, owner_to_display, NAME_MAP
+                    league_id=league_id,
+                    year=year,
+                    playoff_weeks=playoff_weeks,
+                    week_to_round=week_to_round,
+                    rosters=rosters,        # Changed from roster_to_owner
+                    users=users,            # Changed from owner_to_display
+                    name_map=NAME_MAP       # Same
                 )
                 write_to_s3(df_playoffs, 'stg_playoff_matchup_data', year)
                 results['stg_playoff_matchup_data'] = len(df_playoffs)

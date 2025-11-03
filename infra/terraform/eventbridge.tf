@@ -5,7 +5,7 @@
 resource "aws_cloudwatch_event_rule" "weekly_collection" {
   name                = "${var.project}-weekly-collection"
   description         = "Weekly data collection every Wednesday"
-  schedule_expression = "cron(0 12 ? * WED *)"  # Every Wednesday at 12pm UTC (4am PST)
+  schedule_expression = "cron(0 0 ? * WED *)"
   
   state = var.enable_weekly_collection ? "ENABLED" : "DISABLED"
 }

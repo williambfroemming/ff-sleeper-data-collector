@@ -34,12 +34,3 @@ PACKAGE_SIZE_MB=$(du -m "${DEPLOYMENT_PACKAGE}" | cut -f1)
 if [ ${PACKAGE_SIZE_MB} -gt 50 ]; then
     echo "WARNING: Package exceeds 50MB - upload to S3 first"
 fi
-
-echo ""
-echo "Next steps:"
-echo "1. mv lambda_deployment.zip ../infra/terraform/"
-echo "2. Update terraform.tfvars with current_league_id = \"1257436698095136768\""
-echo "3. cd ../infra/terraform && terraform apply"
-echo "4. Run historical backfill:"
-echo "   aws lambda invoke --function-name ff-data-project-ingest \\"
-echo "     --payload '{\"backfill_historical\": true}' response.json"

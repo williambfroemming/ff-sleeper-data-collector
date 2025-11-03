@@ -116,4 +116,24 @@ def collect_player_details_by_team_data(league_id: str, year: int, weeks: range,
                     **stats_dict  # Add all stats columns
                 })
     
-    return pd.DataFrame(all_player_data)
+    df = pd.DataFrame(all_player_data)
+    
+    # Ensure correct data types
+    df['week'] = df['week'].astype('int64')
+    df['roster_id'] = df['roster_id'].astype('int64')
+    df['fantasy_points'] = df['fantasy_points'].astype('float64')
+    df['is_starter'] = df['is_starter'].astype('bool')
+    
+    # Cast all stat columns to float64
+    stat_columns = ['pass_yd', 'pass_td', 'pass_int', 'pass_att', 'pass_cmp',
+                    'rush_yd', 'rush_td', 'rush_att', 'rec', 'rec_yd', 'rec_td', 
+                    'rec_tgt', 'fgm', 'fga', 'xpm', 'xpa', 'def_int', 'def_sack', 
+                    'def_td', 'pts_allow', 'fum_lost']
+    for col in stat_columns:
+        if col in df.columns:
+            df[col] = df[col].astype('float64')
+    
+    # **CRITICAL: Drop year column since it's provided by partition path**
+    df = df.drop(columns=['year'], errors='ignore')
+    
+    return df    

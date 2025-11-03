@@ -24,19 +24,20 @@ variable "historical_leagues" {
 }
 
 variable "name_map" {
-  description = "Mapping of Sleeper display names to real names"
-  type        = map(string)
+  description = "Mapping of Sleeper display names to member_ids"
+  type        = map(number)
   default = {
-    "11kaplandh"      = "Daniel"
-    "Jgersowsky"      = "Justin"
-    "blinton2"        = "Bryan"
-    "BillFroemming"   = "Bill"
-    "OGJonnyB"        = "Jon"
-    "jcarney3344"     = "Jack"
-    "nsaed"           = "Nate"
-    "gizzle4"         = "Eric"
-    "mlguagliardo"    = "Mario"
-    "bgabrielsen"     = "Brian"
+    "11kaplandh"      = 4
+    "Jgersowsky"      = 8
+    "blinton2"        = 3
+    "BillFroemming"   = 1
+    "OGJonnyB"        = 7
+    "jcarney3344"     = 6
+    "nsaed"           = 10
+    "gizzle4"         = 5
+    "mlguagliardo"    = 9
+    "bgabrielsen"     = 2
+    "gawz"            = 5
   }
 }
 

@@ -1,7 +1,7 @@
 """
 Regular Season Data Collector
 Collects season standings with wins, losses, and points
-Outputs to: stg_regular_season
+Outputs to: auto_stg_regular_season
 """
 
 import pandas as pd
@@ -31,26 +31,25 @@ def collect_regular_season_data(league_id: str, year: int, rosters: List[dict],
     
     member_data = [
         {
-            "Member": name_map.get(
+            "member_id": int(name_map.get(
                 user_display_names.get(roster["owner_id"]), 
                 user_display_names.get(roster["owner_id"])
-            ),
-            "Year": year,
-            "Wins": roster.get("settings", {}).get("wins", 0),
-            "Losses": roster.get("settings", {}).get("losses", 0),
-            "Points For": calculate_points_with_decimal(roster.get("settings", {}), "fpts"),
-            "Points Against": calculate_points_with_decimal(roster.get("settings", {}), "fpts_against"),
+            )),
+            "wins": roster.get("settings", {}).get("wins", 0),
+            "losses": roster.get("settings", {}).get("losses", 0),
+            "points_scored": calculate_points_with_decimal(roster.get("settings", {}), "fpts"),
+            "points_against": calculate_points_with_decimal(roster.get("settings", {}), "fpts_against"),
         }
         for roster in rosters
     ]
-    
+
     # Create DataFrame and sort by standings
     df = pd.DataFrame(member_data)
-    df = df.sort_values(by=["Wins", "Points For"], ascending=[False, False])
+    df = df.sort_values(by=["wins", "points_scored"], ascending=[False, False])
     df = df.reset_index(drop=True)
-    df["Place"] = range(1, len(df) + 1)
-    
+    df["place"] = range(1, len(df) + 1)
+
     # Reorder columns
-    df = df[["Member", "Year", "Place", "Wins", "Losses", "Points For", "Points Against"]]
+    df = df[["member_id", "place", "wins", "losses", "points_scored", "points_against"]]
     
     return df

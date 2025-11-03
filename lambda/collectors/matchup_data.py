@@ -56,6 +56,12 @@ def collect_matchup_data(league_id: str, year: int, weeks: range,
     # Add opponent data
     df = _assign_opponents(df)
     
+    # **ADD THIS: Ensure correct data types for Parquet/Hive compatibility**
+    df['matchup_id'] = df['matchup_id'].astype('int64')
+    df['week'] = df['week'].astype('int64')
+    df['points_scored'] = df['points_scored'].astype('float64')
+    df['opponent_points'] = df['opponent_points'].astype('float64')
+    
     return df
 
 
@@ -76,4 +82,7 @@ def _assign_opponents(df: pd.DataFrame) -> pd.DataFrame:
             group.loc[group.index[1], 'opponent_points'] = team1['points_scored']
         return group
 
-    return df.groupby(['week', 'matchup_id'], group_keys=False).apply(assign_opponent_data)
+    res = df.groupby(['week', 'matchup_id'], group_keys=False).apply(assign_opponent_data)
+    # Drop 'year' before writing; it's provided by the S3 partition
+    res = res.drop(columns=['year'], errors='ignore')
+    return res
