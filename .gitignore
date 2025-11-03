@@ -1,4 +1,17 @@
- Python
+# -------------------------
+# OS / Editors
+# -------------------------
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# -------------------------
+# Python
+# -------------------------
 __pycache__/
 *.py[cod]
 *$py.class
@@ -7,40 +20,85 @@ __pycache__/
 venv/
 env/
 ENV/
-.venv
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# Configuration
-config.py
-
-# Data files
-*.xlsx
-*.csv
-*.json
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Testing
+.venv/
+.mypy_cache/
 .pytest_cache/
+.ruff_cache/
 .coverage
 htmlcov/
 
-# Distribution
+# -------------------------
+# Env / Config secrets (adjust if you commit templates)
+# -------------------------
+.env
+.env.*
+config.py
+
+# -------------------------
+# Logs
+# -------------------------
+*.log
+
+# -------------------------
+# Build / Distribution
+# -------------------------
 dist/
 build/
 *.egg-info/
 
+# -------------------------
+# Data files (scoped)
+# If you truly want to ignore ALL csv/xlsx/json everywhere, remove the leading paths.
+# Safer to scope to data/ and archive/ to avoid ignoring real config JSON in code.
+# -------------------------
+data/**/*.csv
+data/**/*.xlsx
+data/**/*.json
+archive/**/*.csv
+archive/**/*.xlsx
+archive/**/*.json
+
+# -------------------------
 # Terraform
-.terraform/
+# Keep .terraform.lock.hcl COMMITTED
+# -------------------------
+**/.terraform/
+**/terraform.tfstate
+**/terraform.tfstate.*
+**/crash.log
+**/crash.*.log
+**/*_override.tf
+**/*_override.tf.json
+override.tf
+override.tf.json
 *.tfstate
 *.tfstate.backup
 *.tfvars
+*.tfvars.json
 infra/terraform/backend.hcl
+
+# -------------------------
+# AWS Lambda (build artifacts)
+# -------------------------
+# Source code in lambda/** stays tracked; builds/archives are ignored
+lambda/build/
+lambda/package/
+lambda/.python_packages/
+lambda/.aws-sam/
+lambda/layer_build/
+lambda/*.whl
+lambda/*.tar.gz
+lambda/*.zip
+infra/terraform/*.zip
+# Occasionally created by misparsed versions during packaging
+lambda/=*/
+# If you intentionally keep example zips somewhere, un-ignore that path:
+# !archive/**/*.zip
+
+# -------------------------
+# Node (if used by any Lambda packaging)
+# -------------------------
+node_modules/
+npm-debug.log*
+yarn-error.log*
+pnpm-lock.yaml

@@ -73,6 +73,7 @@ resource "aws_iam_role_policy_attachment" "glue_crawler_extras_attach" {
   policy_arn = aws_iam_policy.glue_crawler_extras.arn
 }
 
+# Existing crawler for legacy Excel data
 resource "aws_glue_crawler" "staging_legacy_excel" {
   name          = "${var.project}-staging-legacy-excel"
   role          = aws_iam_role.glue_crawler.arn
@@ -97,4 +98,46 @@ resource "aws_glue_crawler" "staging_legacy_excel" {
   recrawl_policy {
     recrawl_behavior = "CRAWL_EVERYTHING"
   }
+}
+
+resource "aws_glue_crawler" "staging_automated" {
+  name          = "${var.project}-staging-automated"
+  role          = aws_iam_role.glue_crawler.arn
+  database_name = aws_glue_catalog_database.raw.name
+  table_prefix  = "auto_"
+
+  # Separate s3_target for each table
+  s3_target {
+    path = "s3://${aws_s3_bucket.lake.bucket}/staging/stg_regular_season/"
+  }
+
+  s3_target {
+    path = "s3://${aws_s3_bucket.lake.bucket}/staging/stg_matchup_data/"
+  }
+
+  s3_target {
+    path = "s3://${aws_s3_bucket.lake.bucket}/staging/stg_playoff_matchup_data/"
+  }
+
+  s3_target {
+    path = "s3://${aws_s3_bucket.lake.bucket}/staging/stg_player_details_by_team/"
+  }
+
+  s3_target {
+    path = "s3://${aws_s3_bucket.lake.bucket}/staging/stg_player_total_points/"
+  }
+
+  configuration = jsonencode({
+    Version = 1.0
+    CrawlerOutput = {
+      Partitions = { AddOrUpdateBehavior = "InheritFromTable" }
+    }
+  })
+
+  schema_change_policy {
+    delete_behavior = "LOG"
+    update_behavior = "UPDATE_IN_DATABASE"
+  }
+
+  schedule = "cron(0 1 ? * THU *)"
 }
